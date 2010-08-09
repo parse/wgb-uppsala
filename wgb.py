@@ -16,7 +16,7 @@ def main():
         clock = pygame.time.Clock()
         ch = CollisionHandler()
 
-        balls = [Ball(screen,(1,1) ), Ball(screen, (1,2) ), Ball(screen, (-1,2) )]
+        balls = [Ball(screen, (3,2) )]
         for ball in balls:
             ch.addBall(ball)
         
