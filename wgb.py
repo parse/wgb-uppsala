@@ -13,9 +13,13 @@ def main():
         h = 480
 
         screen = pygame.display.set_mode((w, h))
+        font = pygame.font.SysFont('Arial Black', 20)
         pygame.mouse.set_visible(False)
         clock = pygame.time.Clock()
         ch = CollisionHandler()
+
+        TIMEEVENT = USEREVENT + 1
+        pygame.time.set_timer(TIMEEVENT, 100)
 
         # Load our balls
         balls = [
@@ -28,9 +32,9 @@ def main():
 
         # Insert walls
         walls = [
-            Wall( screen, (0,0), (10, screen.get_height()) ),
-            Wall( screen, (screen.get_width()-10,0), (10, screen.get_height()) ), 
-            Wall( screen, (0,0), (screen.get_width(), 10) ) 
+            Wall( screen, (0,30), (10, screen.get_height()) ),
+            Wall( screen, (screen.get_width()-10,30), (10, screen.get_height()) ), 
+            Wall( screen, (0,30), (screen.get_width(), 10) ) 
         ]
         
         for wall in walls:
@@ -42,17 +46,24 @@ def main():
         # Game variables
         gameover = False
         lifes = 30
+        time = 0;
+
+        #Load scoreboard
+        scoreBoard = font.render("Life: " + str(lifes) + " Score: ", True, (255, 0, 0))
         
         while not gameover:
             # Check for quits
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     gameover = True
+                if event.type == TIMEEVENT:
+                    time += 1
             
             # Update positions for balls
             for ball in balls: 
                 if ball.update():
                     lifes -= 1
+                    scoreBoard = font.render("Life: " + str(lifes) + " Score: ", True, (255, 0, 0))
             
             # Update positions for paddle
             paddle.update()
@@ -76,6 +87,15 @@ def main():
             # Draw balls
             for ball in balls:
                 ball.draw()
+
+            #Draw scoreboard
+            pygame.draw.rect(screen, (0, 255, 255), (0, 0, time, 30))
+            screen.blit(scoreBoard, (0, 5)) 
+
+            if time >= screen.get_width() or lifes <= 0:
+                pygame.time.set_timer(TIMEEVENT, 0)
+                gameOverImg = font.render("Game Over", True, (255, 0, 0))
+                screen.blit(gameOverImg, (screen.get_width()/2, screen.get_height()/2))
              
             # Update screen
             pygame.display.flip()
