@@ -3,8 +3,10 @@ from ball import *
 from collisionhandler import *
 from wall import *
 
+import random
 import pygame
 from pygame.locals import *
+from pysqlite2 import dbapi2 as sqlite
 
 def main():
     pygame.init()
@@ -48,10 +50,32 @@ def main():
         
         # Game variables
         gameover = False
-        lifes = 30
-        time = 0;
+        viewHighScore = False;
+        lifes = 2
+        time = 0
+        name = "Kalle"
+        score = 0
 
-        #Load scoreboard
+        # Sqllite init
+        connection = sqlite.connect('test.db')
+        cursor = connection.cursor()        
+        try:
+            cursor.execute('CREATE TABLE highscore (id INTEGER PRIMARY KEY, name VARCHAR(50), score INTEGER)')
+        except sqlite.Error:
+            pass
+        try:
+            cursor.execute("SELECT id FROM highscore WHERE name = ?", (name,))
+            data=cursor.fetchone()
+            if data is None:
+                print('There is no component named %s'%name)
+                cursor.execute('INSERT INTO highscore VALUES (null, ?, ?)', (name, score))
+                connection.commit()
+            else:
+                print('Component %s found with rowid %s'%(name,data[0]))
+        except sqlite.Error, e:
+            print "Ooops:", e.args[0]
+        
+        # Load scoreboard
         scoreBoard = font.render("Life: " + str(lifes) + " Score: ", True, (255, 0, 0))
         
         while not gameover:
@@ -59,6 +83,8 @@ def main():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     gameover = True
+                    cursor.close()
+                    connection.close()
                 if event.type == TIMEEVENT:
                     time += 1
             
@@ -95,11 +121,25 @@ def main():
             pygame.draw.rect(screen, (0, 255, 255), (0, 0, time, 30))
             screen.blit(scoreBoard, (0, 5)) 
 
-            if time >= screen.get_width() or lifes <= 0:
+            if time >= screen.get_width() or lifes <= 1:
                 pygame.time.set_timer(TIMEEVENT, 0)
+                lifes = 30;
+                viewHighScore = True;
+                score = random.randint(1, 100);
+                                
+                sql = "UPDATE highscore SET score='"+str(score)+"' WHERE name='"+name+"'"
+                cursor.execute(sql)
+                cursor.execute('SELECT * FROM highscore WHERE name="'+name+'"')
+                text = cursor.fetchone()
+
                 gameOverImg = font.render("Game Over", True, (255, 0, 0))
+                higheScoreImg = font.render("ID: " + str(text[0]) + " Name: " + text[1] + " - " + str(text[2]), True, (255, 0, 0))
+                
+            if viewHighScore:
+                
                 screen.blit(gameOverImg, (screen.get_width()/2, screen.get_height()/2))
-             
+                screen.blit(higheScoreImg, (screen.get_width()/2, screen.get_height()/2+50))
+                
             # Update screen
             pygame.display.flip()
 
