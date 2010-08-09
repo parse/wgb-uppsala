@@ -1,6 +1,7 @@
 from paddle import *
 from ball import *
 from collisionhandler import *
+from wall import *
 
 import pygame
 from pygame.locals import *
@@ -16,33 +17,67 @@ def main():
         clock = pygame.time.Clock()
         ch = CollisionHandler()
 
-        balls = [Ball(screen, (3,2) )]
+        # Load our balls
+        balls = [
+            Ball(screen, (3,2) ), 
+            Ball(screen, (1,3) )
+        ]
+        
         for ball in balls:
             ch.addBall(ball)
+
+        # Insert walls
+        walls = [
+            Wall( screen, (0,0), (10, screen.get_height()) ),
+            Wall( screen, (screen.get_width()-10,0), (10, screen.get_height()) ), 
+            Wall( screen, (0,0), (screen.get_width(), 10) ) 
+        ]
+        
+        for wall in walls:
+            ch.addObject(wall)
         
         paddle = Paddle(screen)
         ch.addObject(paddle)
-		
+        
+        # Game variables
         gameover = False
-
+        lifes = 30
+        
         while not gameover:
+            # Check for quits
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     gameover = True
-
+            
+            # Update positions for balls
             for ball in balls: 
-                ball.update()
-                
+                if ball.update():
+                    lifes -= 1
+            
+            # Update positions for paddle
             paddle.update()
 
+            # Update collision handler
             ch.update()
 			
+            if lifes <= 0:
+                gameover = True
+                
+            # Draw background
             screen.fill((0, 0, 0))
             
+            # Draw walls
+            for wall in walls:
+                wall.draw()
+                
+            # Draw paddle
+            paddle.draw()    
+            
+            # Draw balls
             for ball in balls:
                 ball.draw()
-                
-            paddle.draw()
+             
+            # Update screen
             pygame.display.flip()
 
             clock.tick(60)

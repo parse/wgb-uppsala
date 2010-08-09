@@ -10,18 +10,17 @@ class Ball:
         self.vy = vy
         self.color = 255, 0, 0
         self.radius = 5
+        self.active = True
 
     def update(self):
         self.x += self.vx
         self.y += self.vy
-        if self.x - self.radius < 0:
-            self.vx *= -1
-        elif self.x + self.radius > self.surface.get_width():
-            self.vx *= -1
-        if self.y - self.radius < 0:
-            self.vy *= -1
-        elif self.y + self.radius > self.surface.get_height():
-            self.vy *= -1
+        
+        if self.y > self.surface.get_height() and self.active == True:
+            self.active = False
+            return True
+        else:
+            return False
 
     def draw(self):
         pygame.draw.circle(self.surface, self.color, (int(self.x), int(self.y)), self.radius)
