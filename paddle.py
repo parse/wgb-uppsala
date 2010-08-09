@@ -12,6 +12,11 @@ class Paddle:
  
     def update(self):
         self.x = pygame.mouse.get_pos()[0] - self.w / 2
-
+        
+        if self.x + self.w >= self.surface.get_width()-10:
+            self.x = self.surface.get_width() - self.w - 10
+        if self.x < 10:
+            self.x = 10
+            
     def draw(self):
         pygame.draw.rect(self.surface, self.color, (self.x, self.y, self.w, self.h))

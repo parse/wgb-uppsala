@@ -8,7 +8,7 @@ class Wall:
         self.y = y
         self.w = w
         self.h = h
-        self.color = 128, 0, 128
+        self.color = 200, 0, 128
 
     def draw(self):
         pygame.draw.rect(self.surface, self.color, (self.x, self.y, self.w, self.h))

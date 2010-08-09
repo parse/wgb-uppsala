@@ -2,10 +2,10 @@ import pygame
 from pygame.locals import *
 
 class Ball:
-    def __init__(self, surface, (vx,vy) ):
+    def __init__(self, surface, (x, y), (vx,vy) ):
         self.surface = surface
-        self.x = surface.get_width() / 2.0
-        self.y = surface.get_height() - 150.0
+        self.x = x
+        self.y = y
         self.vx = vx
         self.vy = vy
         self.color = 255, 0, 0

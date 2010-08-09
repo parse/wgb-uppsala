@@ -23,8 +23,11 @@ def main():
 
         # Load our balls
         balls = [
-            Ball(screen, (3,2) ), 
-            Ball(screen, (1,3) )
+            Ball(screen, (70, 15), (3,2) ), 
+            Ball(screen, (200, 60), (3,2) ), 
+            Ball(screen, (190, 75), (3,2) ), 
+            Ball(screen, (50, 45), (3,2) ), 
+            Ball(screen, (100, 200), (1,3) )
         ]
         
         for ball in balls:
