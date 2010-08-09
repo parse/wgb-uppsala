@@ -1,5 +1,3 @@
-from ball import *
-
 import pygame
 from pygame.locals import *
 

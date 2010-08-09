@@ -1,5 +1,3 @@
-from paddle import *
-
 import pygame
 from pygame.locals import *
 
