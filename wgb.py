@@ -2,6 +2,7 @@ from paddle import *
 from ball import *
 from collisionhandler import *
 from wall import *
+from highscore import *
 
 import inputbox
 
@@ -61,7 +62,7 @@ def main():
         viewHighScore = False;
         lifes = len(balls)-1
         time = 0
-        name = "Johan"
+        name = ""
         score = 0
 
         # Sqllite init
@@ -69,9 +70,13 @@ def main():
         cursor = connection.cursor()        
         try:
             cursor.execute('CREATE TABLE highscore (id INTEGER PRIMARY KEY, name VARCHAR(50), score INTEGER)')
+            cursor.close()
         except sqlite3.Error, e:
-            print "Create table:", e.args[0]
-                
+            cursor.close()
+			#print "Create table:", e.args[0]
+
+        highscore = Highscore(screen, connection)
+		
         # Load scoreboard
         scoreBoard = font.render("Life: " + str(lifes) + " Score: ", True, (255, 0, 0))
         
@@ -128,44 +133,20 @@ def main():
                         walls.append(ch.addObject(Wall(screen, (random.randint(50, 550), random.randint(50, 200)), (200,10) )))
                     else:
                         walls.append(ch.addObject(Wall(screen, (random.randint(50, 550), random.randint(50, 200)), (10,200) )))
-                
+
+            # If lifes = 0    
             if lifes <= 0 and run:
+                player = []
                 pygame.time.set_timer(TIMEEVENT, 0)
                 finalScore = score
                 viewHighScore = True
                 run = False
                 name = inputbox.ask(screen, "Your name ")
-                try:
-                    cursor.execute("SELECT id FROM highscore WHERE name = ?", (name,))
-                    data=cursor.fetchone()
-                    if data is None:
-                        print('There is no component named %s'%name)
-                        cursor.execute('INSERT INTO highscore VALUES (null, ?, ?)', (name, score))
-                    else:
-                        print('Component %s found with rowid %s'%(name,data[0]))
-                except sqlite3.Error, e:
-                    print "Ooops:", e.args[0]
-                    
-                cursor.execute("UPDATE highscore SET score='"+str(finalScore)+"' WHERE name='"+name+"'")
-                cursor.execute('SELECT * FROM highscore ORDER BY score DESC LIMIT 0,10')
-                i = 1
-                player = []
+                scoreBoard = font.render("Life: 0 Score: " + str(finalScore), True, (255, 0, 0))
+                player = highscore.update(name, finalScore, font)
                 
-                for row in cursor:				#Loopa genom
-                    player.append(font.render(str(i) + '. ' + str(row[1]) + ' - ' + str(row[2]), True, (255, 0, 0)))
-                    i += 1
-                scoreBoard = font.render("Life: 0 Score: " + str(finalScore), True, (255, 0, 0))                
-                
-            if viewHighScore:                
-                i = 30
-                gameOverImg = font.render("Game Over", True, (255, 0, 0))
-                highScoreImg = font.render("   Name      Score", True, (255, 0, 0))
-                for row in player:
-                    screen.blit(row, (screen.get_width()/2-100, screen.get_height()/2+50+i))
-                    i += 30
-                                
-                screen.blit(gameOverImg, (screen.get_width()/2, screen.get_height()/2))
-                screen.blit(highScoreImg, (screen.get_width()/2-100, screen.get_height()/2+50))
+            if viewHighScore:
+                highscore.draw(player, font)
                 
             # Update screen
             pygame.display.flip()
@@ -173,6 +154,7 @@ def main():
             clock.tick(60)
     finally:
         pygame.quit()
+        connection.close()
 
 if __name__ == "__main__":
     main()
