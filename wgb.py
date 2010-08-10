@@ -59,11 +59,11 @@ def main():
         score = 0
 
         # Sqllite init
-        connection = sqlite.connect('test.db')
+        connection = sqlite3.connect('test.db')
         cursor = connection.cursor()        
         try:
             cursor.execute('CREATE TABLE highscore (id INTEGER PRIMARY KEY, name VARCHAR(50), score INTEGER)')
-        except sqlite.Error, e:
+        except sqlite3.Error, e:
             print "Create table:", e.args[0]
                 
         # Load scoreboard
@@ -131,7 +131,7 @@ def main():
                         cursor.execute('INSERT INTO highscore VALUES (null, ?, ?)', (name, score))
                     else:
                         print('Component %s found with rowid %s'%(name,data[0]))
-                except sqlite.Error, e:
+                except sqlite3.Error, e:
                     print "Ooops:", e.args[0]
                     
                 cursor.execute("UPDATE highscore SET score='"+str(finalScore)+"' WHERE name='"+name+"'")
