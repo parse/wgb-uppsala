@@ -8,16 +8,10 @@ import inputbox
 
 import random
 import pygame
-import sqlite3
-
-def randsign():
-    if(random.randint(0, 1)):
-        return 1
-    else:
-        return -1
 
 def main():
     pygame.init()
+    
     try:
         w = 640
         h = 480
@@ -31,28 +25,21 @@ def main():
         TIMEEVENT = USEREVENT + 1
         pygame.time.set_timer(TIMEEVENT, 15)
 
-        # Load our balls
-        balls = [
-            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
-            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
-            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
-            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
-            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) )
-        ]
-        
+        # Load our balls and add them to collision handler
+        balls = Ball.createRandomBallsAsList(5, screen)
         for ball in balls:
             ch.addBall(ball)
 
-        # Insert walls
+        # Insert walls and add them to collision handler
         walls = [
             Wall( screen, (0,30), (10, screen.get_height()) ),
             Wall( screen, (screen.get_width()-10,30), (10, screen.get_height()) ), 
             Wall( screen, (0,30), (screen.get_width(), 10) ) 
         ]
-        
         for wall in walls:
             ch.addObject(wall)
         
+        # Create paddle and add it to collision handler
         paddle = Paddle(screen)
         ch.addObject(paddle)
         
@@ -65,33 +52,32 @@ def main():
         name = ""
         score = 0
 
-        # Sqllite init
-        connection = sqlite3.connect('test.db')
-        cursor = connection.cursor()        
-        try:
-            cursor.execute('CREATE TABLE highscore (id INTEGER PRIMARY KEY, name VARCHAR(50), score INTEGER)')
-            cursor.close()
-        except sqlite3.Error, e:
-            cursor.close()
-			#print "Create table:", e.args[0]
-
-        highscore = Highscore(screen, connection)
+        # Initialize highscore
+        highscore = Highscore(screen)
 		
         # Load scoreboard
         scoreBoard = font.render("Life: " + str(lifes) + " Score: ", True, (255, 0, 0))
         
         while not gameover:
+        
             # Check for quits
             for event in pygame.event.get():
+            
                 if event.type == pygame.QUIT:
                     gameover = True
                     cursor.close()
                     connection.commit()
                     connection.close()
+                    
                 if event.type == TIMEEVENT:
                     time += 1
-                if event.type == KEYUP and not(run):
-                    if event.key == K_SPACE:
+                
+                # Key presses
+                if event.type == KEYUP:
+                    if event.key == K_i:
+                        print "Instructions placed as long as key i is pressed"
+                        
+                    if event.key == K_SPACE and not(run):
                         run = True
                         gameover = False
                         viewHighScore = False;
@@ -100,21 +86,16 @@ def main():
                         name = ""
                         score = 0
                         pygame.time.set_timer(TIMEEVENT, 15)
-                        # Load our balls
-                        balls = [
-                            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
-                            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
-                            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
-                            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
-                            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) )
-                        ]
+                        
+                        # Load our balls and add them to collision handler
+                        balls = Ball.createRandomBallsAsList(5, screen)
                         
                         for ball in balls:
                             ch.addBall(ball)
             
             # Update positions for balls
             for ball in balls: 
-                if ball.update():
+                if ball.update(): # Returns true if ball goes below paddle-level
                     lifes -= 1
             
             # Update positions for paddle
@@ -145,6 +126,7 @@ def main():
             pygame.draw.rect(screen, (0, 255, 255), (0, 0, time, 30))
             screen.blit(scoreBoard, (10, 5)) 
 
+            # Level up!
             if time >= screen.get_width():
                 time = 0;
                 if(random.randint(0, 1)):
@@ -173,9 +155,15 @@ def main():
             pygame.display.flip()
 
             clock.tick(60)
+            
     finally:
         pygame.quit()
-        connection.close()
+        
+        # Close database connection
+        try:
+            highscore.db.close()
+        except NameError:
+            print "Ooops, no connection"
 
 if __name__ == "__main__":
     main()

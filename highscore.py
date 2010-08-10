@@ -3,7 +3,16 @@ import pygame
 from pygame.locals import *
 
 class Highscore:
-    def __init__(self, surface, connection):
+    def __init__(self, surface):
+        connection = sqlite3.connect('test.db')
+        cursor = connection.cursor()        
+        
+        try:
+            cursor.execute('CREATE TABLE highscore (id INTEGER PRIMARY KEY, name VARCHAR(50), score INTEGER)')
+            cursor.close()
+        except sqlite3.Error, e:
+            cursor.close()
+            
         self.surface = surface
         self.db = connection
         self.cur = self.db.cursor()
@@ -14,6 +23,7 @@ class Highscore:
         self.cur.execute("SELECT COUNT(*) FROM highscore" )
         result = self.cur.fetchall()
         nrecs = result[0][0]
+        
         if nrecs > 10:
             self.cur.execute('SELECT * FROM highscore ORDER BY score DESC LIMIT 9,1')
             last = self.cur.fetchone()
@@ -57,7 +67,6 @@ class Highscore:
         for row in player:
             self.surface.blit(row, (self.surface.get_width()/2-100, 140+i))
             i += 20
-            
 
         self.surface.blit(gameOverImg, (self.surface.get_width()/2-120, 70))
         self.surface.blit(highScoreImg, (self.surface.get_width()/2-100, 140))
