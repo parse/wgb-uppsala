@@ -22,11 +22,7 @@ class Highscore:
 #                        print('Component %s found with rowid %s'%(name,data[0]))
         except sqlite3.Error, e:
             print "Ooops:", e.args[0]
-
-        try:
-            self.cur.execute("UPDATE highscore SET score='"+str(score)+"' WHERE name='"+name+"'")
-        except sqlite3.Error, e:
-            print "Ooops:", e.args[0]
+            
         try: 
             self.cur.execute('SELECT * FROM highscore ORDER BY score DESC LIMIT 0,10')
         except sqlite3.Error, e:
@@ -39,6 +35,7 @@ class Highscore:
 
     def draw(self, player, font):
         i = 30
+        
         gameOverImg = font.render("Game Over", True, (255, 0, 0))
         highScoreImg = font.render("Name      Score", True, (255, 0, 0))
         for row in player:
