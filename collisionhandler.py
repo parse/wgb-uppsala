@@ -17,7 +17,8 @@ class CollisionHandler:
     
     def addObject(self, object):
         self._objects.append(object)
-        print
+        return object
+    
     def update(self):
         i = 1
         
