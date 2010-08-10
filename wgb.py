@@ -32,9 +32,9 @@ def main():
 
         # Insert walls and add them to collision handler
         walls = [
-            Wall( screen, (0,30), (10, screen.get_height()) ),
-            Wall( screen, (screen.get_width()-10,30), (10, screen.get_height()) ), 
-            Wall( screen, (0,30), (screen.get_width(), 10) ) 
+            Wall( screen, (0,30), (10, screen.get_height()) ), # Left wall
+            Wall( screen, (screen.get_width()-10,30), (10, screen.get_height()) ), # Right wall
+            Wall( screen, (0,30), (screen.get_width(), 10) ) # Top wall
         ]
         for wall in walls:
             ch.addObject(wall)
