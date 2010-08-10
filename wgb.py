@@ -23,7 +23,7 @@ def main():
         h = 480
 
         screen = pygame.display.set_mode((w, h))
-        font = pygame.font.SysFont('Arial Black', 20)
+        font = pygame.font.SysFont('Arial Black', 17)
         pygame.mouse.set_visible(False)
         clock = pygame.time.Clock()
         ch = CollisionHandler()
@@ -60,7 +60,7 @@ def main():
         run = True
         gameover = False
         viewHighScore = False;
-        lifes = len(balls)-1
+        lifes = len(balls)
         time = 0
         name = ""
         score = 0
@@ -90,6 +90,27 @@ def main():
                     connection.close()
                 if event.type == TIMEEVENT:
                     time += 1
+                if event.type == KEYUP and not(run):
+                    if event.key == K_SPACE:
+                        run = True
+                        gameover = False
+                        viewHighScore = False;
+                        lifes = len(balls)
+                        time = 0
+                        name = ""
+                        score = 0
+                        pygame.time.set_timer(TIMEEVENT, 15)
+                        # Load our balls
+                        balls = [
+                            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
+                            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
+                            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
+                            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
+                            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) )
+                        ]
+                        
+                        for ball in balls:
+                            ch.addBall(ball)
             
             # Update positions for balls
             for ball in balls: 
@@ -122,7 +143,7 @@ def main():
                 scoreBoard = font.render("Life: " + str(lifes) + " Score: " + str(score), True, (255, 0, 0))
 
             pygame.draw.rect(screen, (0, 255, 255), (0, 0, time, 30))
-            screen.blit(scoreBoard, (0, 5)) 
+            screen.blit(scoreBoard, (10, 5)) 
 
             if time >= screen.get_width():
                 time = 0;
