@@ -7,8 +7,7 @@ import inputbox
 
 import random
 import pygame
-from pygame.locals import *
-from pysqlite2 import dbapi2 as sqlite
+import sqlite3
 
 def main():
     pygame.init()
