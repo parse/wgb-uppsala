@@ -124,7 +124,10 @@ def main():
                 if(random.randint(0, 1)):
                     balls.append(ch.addBall(Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) )))
                 else:
-                    walls.append(ch.addObject(Wall(screen, (random.randint(50, 550), random.randint(50, 200)), (random.randint(5, 100),random.randint(5, 100)) )))
+                    if(random.randint(0, 1)):
+                        walls.append(ch.addObject(Wall(screen, (random.randint(50, 550), random.randint(50, 200)), (200,10) )))
+                    else:
+                        walls.append(ch.addObject(Wall(screen, (random.randint(50, 550), random.randint(50, 200)), (10,200) )))
                 
             if lifes <= 0 and run:
                 pygame.time.set_timer(TIMEEVENT, 0)
