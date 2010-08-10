@@ -13,16 +13,18 @@ class CollisionHandler:
     
     def addBall(self, ball):
         self._balls.append(ball)
+        return ball
     
     def addObject(self, object):
         self._objects.append(object)
-    
+        print
     def update(self):
         i = 1
         
         for ball in self._balls:
             for obj in self._objects:
-                self._ballOnObject(ball, obj)
+                if self._ballOnObject(ball, obj):
+                    return True
                 
             for ball2 in self._balls[i:]:
                 self._ballOnBall(ball, ball2)
@@ -41,11 +43,13 @@ class CollisionHandler:
         if ball.y - ball.radius > obj.y + obj.h: # Om bollen ar under objectet...
             if ball.y - ball.radius + ball.vy <= obj.y + obj.h: # Och kommer att vara krocka nasta gang...
                 if ball.x + ball.vx >= obj.x and ball.x + ball.vx <= obj.x + obj.w: # Och ligger ratt i x-led
-                    ball.vy *= -1
+                    ball.vy *= -1                    
         if ball.y + ball.radius < obj.y: # Om bollen ar till ovanfor objectet...
             if ball.y + ball.radius + ball.vy >= obj.y: # Och kommer att vara krocka nasta gang...
                 if ball.x + ball.vx >= obj.x and ball.x + ball.vx <= obj.x + obj.w: # Och ligger ratt i x-led
                     ball.vy *= -1
+                    if isinstance(obj, Paddle): # Kollar om det ar paddlen som bollen krockar med
+                        return True
     
     def _ballOnBall(self, ball1, ball2):
         dy = ball1.y - ball2.y
@@ -60,5 +64,5 @@ class CollisionHandler:
             self._handleBallOnBallCollision(ball1, ball2)
             
     def _handleBallOnBallCollision(self, ball1, ball2):
-    
-        print "WOFF!"
+        pass
+        #print "WOFF!"
