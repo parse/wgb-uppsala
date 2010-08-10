@@ -9,6 +9,12 @@ import random
 import pygame
 import sqlite3
 
+def randsign():
+    if(random.randint(0, 1)):
+        return 1
+    else:
+        return -1
+
 def main():
     pygame.init()
     try:
@@ -26,11 +32,11 @@ def main():
 
         # Load our balls
         balls = [
-            Ball(screen, (70, 15), (random.randint(1,3),random.randint(1,3)) ), 
-            Ball(screen, (200, 60), (random.randint(1,3),random.randint(1,3)) ), 
-            Ball(screen, (random.randint(50, 200), 75), (3,2) ), 
-            Ball(screen, (50, 45), (3,2) ), 
-            Ball(screen, (100, 200), (1,3) )
+            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
+            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
+            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
+            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) ), 
+            Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) )
         ]
         
         for ball in balls:
@@ -115,7 +121,7 @@ def main():
 
             if time >= screen.get_width():
                 time = 0;
-                balls.append(ch.addBall(Ball(screen, (random.randint(50, 100), random.randint(100, 200)), (random.randint(1,3),random.randint(1,3)) )))
+                balls.append(ch.addBall(Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) )))
                 
             if lifes <= 0 and run:
                 pygame.time.set_timer(TIMEEVENT, 0)
@@ -142,7 +148,6 @@ def main():
                 for row in cursor:				#Loopa genom
                     player.append(font.render(str(i) + '. ' + str(row[1]) + ' - ' + str(row[2]), True, (255, 0, 0)))
                     i += 1
-                print answer
                 scoreBoard = font.render("Life: 0 Score: " + str(finalScore), True, (255, 0, 0))                
                 
             if viewHighScore:                
