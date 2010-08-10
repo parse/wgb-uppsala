@@ -64,5 +64,9 @@ class CollisionHandler:
             self._handleBallOnBallCollision(ball1, ball2)
             
     def _handleBallOnBallCollision(self, ball1, ball2):
-        pass
-        #print "WOFF!"
+        tempx = ball1.x
+        tempy = ball1.y
+        ball1.x = ball2.x
+        ball1.y = ball2.y
+        ball2.x = tempx
+        ball2.y = tempy
