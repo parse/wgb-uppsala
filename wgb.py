@@ -75,6 +75,22 @@ def main():
                 # Key presses
                 if event.type == KEYUP:
                     if event.key == K_i:
+                        font2 = pygame.font.SysFont('Arial Black', 40)
+                        #pygame.draw.rect(surface, (255,255,255), (surface.get_width()/2-129, 79,302, 462), 0)
+                        trans = pygame.Surface((300, 350))
+                        trans.fill((0,0,0))
+                        pygame.Surface.convert_alpha(trans)
+                        trans.set_alpha(128)
+
+                        screen.blit(trans, (screen.get_width()/2-130,80))                                
+                        
+                        gameOverImg = font2.render("Game Over", True, (255, 0, 0))
+                        highScoreImg = font.render("Name      Score", True, (255, 0, 0))
+                        pressSpaceImg = font.render("Press space to try again", True, (255, 0, 0))
+                        
+                        screen.blit(gameOverImg, (screen.get_width()/2-120, 70))
+                        screen.blit(highScoreImg, (screen.get_width()/2-100, 140))
+                        screen.blit(pressSpaceImg, (screen.get_width()-250, screen.get_height()-30))
                         print "Instructions placed as long as key i is pressed"
                         
                     if event.key == K_SPACE and not(run):
@@ -128,15 +144,20 @@ def main():
 
             # Level up!
             if time >= screen.get_width():
-                time = 0;
-                if(random.randint(0, 1)):
+                time = 0
+                action = random.randint(0, 2) # Randomize action
+                
+                if action == 0:
+                    # Add new ball
                     balls.append(ch.addBall(Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) )))
-                else:
-                    if(random.randint(0, 1)):
+                elif action == 1 or action == 2:
+                    # Add new wall, vertical or horizontal
+                    if random.randint(0, 1):
                         walls.append(ch.addObject(Wall(screen, (random.randint(50, 550), random.randint(50, 200)), (200,10) )))
                     else:
                         walls.append(ch.addObject(Wall(screen, (random.randint(50, 550), random.randint(50, 200)), (10,200) )))
-
+                    # Add bonus item here
+                    
             # If lifes = 0    
             if lifes <= 0 and run:
                 player = []
@@ -159,7 +180,7 @@ def main():
     finally:
         pygame.quit()
         
-        # Close database connection
+        # Try close database connection
         try:
             highscore.db.close()
         except NameError:
