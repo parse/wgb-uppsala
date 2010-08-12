@@ -45,6 +45,7 @@ def main():
         
         # Game variables
         run = True
+        pause = False
         gameover = False
         viewHighScore = False;
         lifes = len(balls)
@@ -69,7 +70,7 @@ def main():
                     connection.commit()
                     connection.close()
                     
-                if event.type == TIMEEVENT:
+                if event.type == TIMEEVENT and not pause:
                     time += 1
                 
                 # Key presses
@@ -109,10 +110,11 @@ def main():
                         for ball in balls:
                             ch.addBall(ball)
             
-            # Update positions for balls
-            for ball in balls: 
-                if ball.update(): # Returns true if ball goes below paddle-level
-                    lifes -= 1
+            if not pause:
+                # Update positions for balls
+                for ball in balls: 
+                    if ball.update(): # Returns true if ball goes below paddle-level
+                        lifes -= 1
             
             # Update positions for paddle
             paddle.update()
