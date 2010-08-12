@@ -76,6 +76,8 @@ def main():
                 # Key presses
                 if event.type == KEYUP:
                     if event.key == K_i:
+                        pause = not pause
+                        
                         font2 = pygame.font.SysFont('Arial Black', 40)
                         #pygame.draw.rect(surface, (255,255,255), (surface.get_width()/2-129, 79,302, 462), 0)
                         trans = pygame.Surface((300, 350))
