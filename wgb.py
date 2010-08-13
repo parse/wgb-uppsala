@@ -56,7 +56,7 @@ def main():
         pause = False
         gameover = False
         viewHighScore = False;
-        lifes = len(balls)
+        lifes = 3
         time = 0
         name = ""
         score = 0
@@ -91,7 +91,7 @@ def main():
                         run = True
                         gameover = False
                         viewHighScore = False;
-                        lifes = len(balls)
+                        lifes = 3
                         time = 0
                         name = ""
                         score = 0
