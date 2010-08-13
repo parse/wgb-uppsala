@@ -7,3 +7,6 @@ När den gröna mätaren (högst upp på skärmen) fyllts så tillkommer en till boll o
 Instruktioner finns på knappen "i"
 
 Lycka till!
+
+Projektets hemsida
+https://code.google.com/p/wgb-uppsala/
