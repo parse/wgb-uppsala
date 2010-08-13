@@ -26,7 +26,7 @@ def main():
         pygame.time.set_timer(TIMEEVENT, 15)
 
         # Load our balls and add them to collision handler
-        balls = Ball.createRandomBallsAsList(5, screen)
+        balls = Ball.createRandomBallsAsList(3, screen)
         for ball in balls:
             ch.addBall(ball)
 
@@ -66,9 +66,9 @@ def main():
             
                 if event.type == pygame.QUIT:
                     gameover = True
-                    cursor.close()
-                    connection.commit()
-                    connection.close()
+                    highscore.cur.close()
+                    highscore.db.commit()
+                    highscore.db.close()
                     
                 if event.type == TIMEEVENT and not pause:
                     time += 1
@@ -114,7 +114,7 @@ def main():
                         ch.addObject(paddle)
                         
                         # Load our balls and add them to collision handler
-                        balls = Ball.createRandomBallsAsList(5, screen)
+                        balls = Ball.createRandomBallsAsList(3, screen)
                         
                         for ball in balls:
                             ch.addBall(ball)
@@ -158,10 +158,10 @@ def main():
                 time = 0
                 action = random.randint(0, 2) # Randomize action
                 
-                if action == 0:
+                if action == 0 or action == 1:
                     # Add new ball
                     balls.append(ch.addBall(Ball(screen, (random.randint(50, 550), random.randint(50, 200)), (randsign()*random.uniform(1.0,3.0),random.uniform(1.0,3.0)) )))
-                elif action == 1 or action == 2:
+                elif action == 2:
                     # Add new wall, vertical or horizontal
                     if random.randint(0, 1):
                         walls.append(ch.addObject(Wall(screen, (random.randint(50, 550), random.randint(50, 200)), (200,10) )))
