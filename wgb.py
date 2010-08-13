@@ -78,24 +78,6 @@ def main():
                     if event.key == K_i:
                         pause = not pause
                         
-                        font2 = pygame.font.SysFont('Arial Black', 40)
-                        #pygame.draw.rect(surface, (255,255,255), (surface.get_width()/2-129, 79,302, 462), 0)
-                        trans = pygame.Surface((300, 350))
-                        trans.fill((0,0,0))
-                        pygame.Surface.convert_alpha(trans)
-                        trans.set_alpha(128)
-
-                        screen.blit(trans, (screen.get_width()/2-130,80))                                
-                        
-                        gameOverImg = font2.render("Game Over", True, (255, 0, 0))
-                        highScoreImg = font.render("Name      Score", True, (255, 0, 0))
-                        pressSpaceImg = font.render("Press space to try again", True, (255, 0, 0))
-                        
-                        screen.blit(gameOverImg, (screen.get_width()/2-120, 70))
-                        screen.blit(highScoreImg, (screen.get_width()/2-100, 140))
-                        screen.blit(pressSpaceImg, (screen.get_width()-250, screen.get_height()-30))
-                        print "Instructions placed as long as key i is pressed"
-                        
                     if event.key == K_SPACE and not(run):
                         run = True
                         gameover = False
@@ -179,9 +161,34 @@ def main():
                 name = inputbox.ask(screen, "Your name ")
                 scoreBoard = font.render("Life: 0 Score: " + str(finalScore), True, (255, 0, 0))
                 player = highscore.update(name, finalScore, font)
-                
+            
+            # List highscore
             if viewHighScore:
                 highscore.draw(player, font)
+                
+            # Print instructions
+            if pause:
+                font2 = pygame.font.SysFont('Arial Black', 40)
+                trans = pygame.Surface((300, 350))
+                trans.fill((0,0,0))
+                pygame.Surface.convert_alpha(trans)
+                trans.set_alpha(128)
+
+                screen.blit(trans, (screen.get_width()/2-130,80))                                
+                
+                gameOverImg = font2.render("Instructions", True, (255, 0, 0))
+                row1 = font.render("Game starts with 3 balls, keep them in movement for ", True, (255, 0, 0))
+                row2 = font.render("as long as you can.", True, (255,0,0) )
+                row3 = font.render("When the green bar on top of the screen is", True, (255,0,0) )
+                row4 = font.render("full, you either get a new ball or a new wall.", True, (255,0,0) )
+                row5 = font.render("Press i to return to game.", True, (255,0,0) )
+                
+                screen.blit(gameOverImg, (screen.get_width()/2-120, 70))
+                screen.blit(row1, (screen.get_width()/2-240, 140))
+                screen.blit(row2, (screen.get_width()/2-240, 160))
+                screen.blit(row3, (screen.get_width()/2-240, 200))
+                screen.blit(row4, (screen.get_width()/2-240, 220))
+                screen.blit(row5, (screen.get_width()/2-240, 280))
                 
             # Update screen
             pygame.display.flip()
