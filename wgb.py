@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+#
+# Multimediaprogrammering i Python ST2010
+# written by Jonatan Jansson, Anders Hassis & Johan Nänzen
+# using Python 2.6.4
+#
+
 from paddle import *
 from ball import *
 from collisionhandler import *
@@ -63,10 +71,11 @@ def main():
         
             # Check for quits
             for event in pygame.event.get():
-            
+                
+                # Quit-event
                 if event.type == pygame.QUIT:
                     gameover = True
-                    highscore.cur.close()
+                    highscore.cur.close() # Close database connection
                     highscore.db.commit()
                     highscore.db.close()
                     

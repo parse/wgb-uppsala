@@ -1,5 +1,7 @@
-# by Timothy Downs, inputbox written for my map editor
-
+# Title: Inputbox Module
+# Author: Timothy Downs
+# Submission date: January 23, 2002 
+# Description: A function to display an inputbox and return the inputted text string.# by Timothy Downs, inputbox written for my map editor
 # This program needs a little cleaning up
 # It ignores the shift key
 # And, for reasons of my own, this program converts "-" to "_"

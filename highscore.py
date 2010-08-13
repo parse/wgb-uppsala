@@ -1,4 +1,10 @@
-﻿import sqlite3
+﻿#
+# Multimediaprogrammering i Python ST2010
+# written by Jonatan Jansson, Anders Hassis & Johan Nänzen
+# using Python 2.6.4
+#
+
+import sqlite3
 import pygame
 from pygame.locals import *
 

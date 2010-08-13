@@ -1,7 +1,0 @@
-TODO:
-    * Kunna starta om spelet
-    * Lista instruktioner
-    * Marginal i highscorelistningen så namn och score hamnar rätt (typ) :p
-    * Slumpa ut objekt som man ska fånga med paddeln så den ex. ökar i bredd osv. (?)
-
-*** FYLL PÅ** :D
