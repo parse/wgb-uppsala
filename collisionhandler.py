@@ -19,6 +19,10 @@ class CollisionHandler:
         self._objects.append(object)
         return object
     
+    def reset(self):
+        self._balls = []
+        self._objects = []
+    
     def update(self):
         i = 1
         

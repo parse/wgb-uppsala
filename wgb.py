@@ -106,6 +106,13 @@ def main():
                         score = 0
                         pygame.time.set_timer(TIMEEVENT, 15)
                         
+                        ch.reset()
+                        
+                        walls = walls[0:3]
+                        for wall in walls:
+                            ch.addObject(wall)
+                        ch.addObject(paddle)
+                        
                         # Load our balls and add them to collision handler
                         balls = Ball.createRandomBallsAsList(5, screen)
                         
