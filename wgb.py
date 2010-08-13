@@ -150,7 +150,7 @@ def main():
             if run:
                 scoreBoard = font.render("Life: " + str(lifes) + " Score: " + str(score), True, (255, 0, 0))
 
-            pygame.draw.rect(screen, (0, 255, 255), (0, 0, time, 30))
+            pygame.draw.rect(screen, (30, 200, 10), (0, 0, time, 30))
             screen.blit(scoreBoard, (10, 5)) 
 
             # Level up!
